@@ -1,4 +1,5 @@
 *.user
+*.nupkg
 .vs/
 packages/
 bin/

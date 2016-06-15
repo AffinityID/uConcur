@@ -294,6 +294,7 @@
     <None Include="app.config" />
     <Content Include="App_Plugins\uConcur\package.manifest" />
     <None Include="packages.config" />
+    <None Include="uConcur.nuspec" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
