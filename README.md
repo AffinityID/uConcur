@@ -18,5 +18,5 @@ Currently in internal testing, will be released to public NuGet after that.
   
   This is something we're looking at fixing in a future version.
   
-* The library integrates with Umbraco on a very low level, which be unreliable between Umbraco releases.  
+* The library integrates with Umbraco on a very low level, which might be unreliable between Umbraco releases.  
   Please include your Umbraco version in any reported issues.
