@@ -29,6 +29,7 @@ namespace uConcur.Internal.Filters {
 
             _logger.Warn(conflict.Message, conflict);
             var display = Mapper.Map<IContent, ContentItemDisplay>((IContent)conflict.Attempted);
+            display.UpdateDate = conflict.AttemptedDate;
             var changedAgo = DateTime.Now - conflict.Latest.UpdateDate;
             var changedByUser = _userService.GetUserById(((IContent)conflict.Latest).WriterId);
             // cannot use display.AddErrorNotification as it is not handled by JS properly

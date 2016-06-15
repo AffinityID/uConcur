@@ -13,11 +13,10 @@ namespace uConcur.Tests.Web.Helpers {
 
         public UmbracoDriverWrapper(IWebDriver webDriver) {
             _webDriver = webDriver;
-            _webDriver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
         }
 
         public UmbracoDriverWrapper Login(string username, string password = "testpassword") {
-            _webDriver.FindElement(By.Name("username")).SendKeys(username);
+            WaitForElement(By.Name("username")).SendKeys(username);
             _webDriver.FindElement(By.Name("password")).SendKeys(password);
             _webDriver.FindElement(By.CssSelector("button[type=submit]")).Click();
             WaitUntil(() => !_webDriver.Url.Contains("/login"), "Login failed.");
@@ -30,6 +29,9 @@ namespace uConcur.Tests.Web.Helpers {
         }
 
         public UmbracoDriverWrapper Save() {
+            // notification intersects with the menu (at least in 7.4.0)
+            WaitUntil(() => !HasNotifications(), "'Save' might be overlayed by notification that didn't disappear yet.");
+
             _webDriver.FindElement(By.CssSelector(".umb-tab-buttons .btn-success.dropdown-toggle")).Click();
             _webDriver.FindElement(By.CssSelector(".umb-tab-buttons .dropdown-menu li:first-child a")).Click();
             return this;
@@ -55,7 +57,16 @@ namespace uConcur.Tests.Web.Helpers {
             return this;
         }
 
+        public UmbracoDriverWrapper DismissNotifications() {
+            foreach (var close in _webDriver.FindElements(By.CssSelector(".umb-notifications .alert .close"))) {
+                close.Click();
+            }
+            WaitUntil(() => !HasNotifications(), "Failed to dismiss one or more notifications.");
+            return this;
+        }
+
         public UmbracoNotification WaitForNotification() {
+            WaitUntil(HasNotifications, "Failed to get a notification.");
             var element = _webDriver.FindElement(By.CssSelector(".umb-notifications .alert"));
             var alertTypeString = Regex.Match(element.GetAttribute("class"), "alert-(success|error)").Groups[1].Value;
             var headline = element.FindElement(By.CssSelector("strong"));
@@ -72,7 +83,23 @@ namespace uConcur.Tests.Web.Helpers {
             _webDriver.Navigate().Refresh();
             return this;
         }
-        
+
+        private bool HasNotifications() {
+            return _webDriver.FindElements(By.CssSelector(".umb-notifications .alert")).Count > 0;
+        }
+
+        private IWebElement WaitForElement(By by) {
+            IWebElement element = null;
+            WaitUntil(
+                () => {
+                    element = _webDriver.FindElements(by).FirstOrDefault();
+                    return element != null;
+                },
+                $"Failed to find element {by}."
+            );
+            return element;
+        }
+
         private void WaitUntil(Func<bool> condition, string message) {
             var waitTime = 100.Milliseconds();
             var maxTryCount = (int)(2.Minutes().TotalMilliseconds / waitTime.TotalMilliseconds);
