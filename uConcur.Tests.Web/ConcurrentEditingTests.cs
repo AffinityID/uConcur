@@ -131,6 +131,7 @@ namespace uConcur.Tests.Web {
                 textarea.SendKeys($"{value} ({DateTime.Now:HH:mm:ss.fff})");
             };
         }
+
         private static void AssertIsConflictError(string expectedOtherUserName, UmbracoNotification notification) {
             Assert.AreEqual(BootstrapAlertType.Error, notification.AlertType);
             StringAssert.Contains($"changed by user {expectedOtherUserName}", notification.Message);
