@@ -3,9 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using AshMind.Extensions;
 using log4net;
-using Umbraco.Core.Persistence;
 
 namespace uConcur.Internal.Filters {
     public class CopyExtraDataOnSaveFilter : ActionFilterAttribute {

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using AshMind.Extensions;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using uConcur.Tests.Web.Helpers.Models;
@@ -74,7 +73,7 @@ namespace uConcur.Tests.Web.Helpers {
 
             return new UmbracoNotification(
                 (BootstrapAlertType)Enum.Parse(typeof(BootstrapAlertType), alertTypeString, true),
-                headline.Text.Trim().RemoveEnd(":"),
+                Regex.Replace(headline.Text.Trim(), ":$", ""),
                 message.Text
             );
         }
@@ -101,8 +100,8 @@ namespace uConcur.Tests.Web.Helpers {
         }
 
         private void WaitUntil(Func<bool> condition, string message) {
-            var waitTime = 100.Milliseconds();
-            var maxTryCount = (int)(2.Minutes().TotalMilliseconds / waitTime.TotalMilliseconds);
+            var waitTime = TimeSpan.FromMilliseconds(100);
+            var maxTryCount = (int)(TimeSpan.FromMinutes(2).TotalMilliseconds / waitTime.TotalMilliseconds);
             var tryCount = 0;
 
             while (!condition()) {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using AshMind.Extensions;
 using Centaur;
 using NUnit.Framework;
 using OpenQA.Selenium.Chrome;
@@ -32,10 +32,10 @@ namespace uConcur.Tests.Web.Helpers {
 
         [TestFixtureSetUp]
         public virtual void BeforeAllTests() {
+            var assemblyDirectoryPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase).LocalPath);
             var path = Path.GetFullPath(Path.Combine(
                 // ReSharper disable once AssignNullToNotNullAttribute
-                Assembly.GetExecutingAssembly().GetAssemblyFileFromCodeBase().DirectoryName,
-                "../../../uConcur.Tests.Web.Umbraco-7.4.0"
+                assemblyDirectoryPath, "../../../uConcur.Tests.Web.Umbraco-7.4.0"
             ));
             if (!Directory.Exists(path))
                 throw new FileNotFoundException($"Path '{path}' was not found.", path);

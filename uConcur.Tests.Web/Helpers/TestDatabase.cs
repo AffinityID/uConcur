@@ -1,13 +1,8 @@
-﻿using AshMind.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Data.SqlServerCe;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace uConcur.Tests.Web.Helpers {
     public  class TestDatabase {
@@ -52,7 +47,7 @@ namespace uConcur.Tests.Web.Helpers {
                 using (var command = connection.CreateCommand()) {
                     command.CommandType = CommandType.Text;
                     foreach (var script in scripts) {
-                        if (script.IsNullOrWhiteSpace())
+                        if (string.IsNullOrWhiteSpace(script))
                             continue;
                         try {
                             command.CommandText = script;

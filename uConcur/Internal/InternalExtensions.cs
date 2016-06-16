@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using AshMind.Extensions;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Umbraco.Core.Models;
 using Umbraco.Web.Models.ContentEditing;
@@ -12,13 +11,13 @@ namespace uConcur.Internal {
         [CanBeNull]
         public static string GetUpdateDateOverrideString([NotNull] this ContentItemSave item) {
             Argument.NotNull(nameof(item), item);
-            return (string)item.AdditionalData.GetValueOrDefault(UpdateDateOverrideKey);
+            return (string)GetValueOrDefault(item.AdditionalData, UpdateDateOverrideKey);
         }
 
         [CanBeNull]
         public static DateTime? GetUpdateDateOverride([NotNull] this IContent content) {
             Argument.NotNull(nameof(content), content);
-            return (DateTime?)content.AdditionalData.GetValueOrDefault(UpdateDateOverrideKey);
+            return (DateTime?)GetValueOrDefault(content.AdditionalData, UpdateDateOverrideKey);
         }
 
         [CanBeNull]
@@ -30,6 +29,12 @@ namespace uConcur.Internal {
             }
 
             content.AdditionalData[UpdateDateOverrideKey] = value;
+        }
+
+        // normally I have this in AshMind.Extensions, but wanted to avoid the dependency is this plugin
+        private static object GetValueOrDefault(IDictionary<string, object> additionalData, string key) {
+            object value;
+            return additionalData.TryGetValue(key, out value) ? value : null;
         }
     }
 }

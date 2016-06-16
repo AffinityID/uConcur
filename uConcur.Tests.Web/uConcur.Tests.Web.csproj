@@ -32,10 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AshMind.Extensions, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AshMind.Extensions.1.7.2\lib\net45\AshMind.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Centaur, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Centaur.1.0.6\lib\net40\Centaur.dll</HintPath>
       <Private>True</Private>

@@ -33,14 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Argument, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Argument.1.0.3\lib\net45\Argument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="AshMind.Extensions, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AshMind.Extensions.1.7.2\lib\net45\AshMind.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -276,6 +268,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentConflictException.cs" />
+    <Compile Include="Internal\Argument.cs" />
     <Compile Include="Internal\InternalExtensions.cs" />
     <Compile Include="Internal\RepositoryFactoryInterceptor.cs" />
     <Compile Include="Internal\ContentRepositoryInterceptor.cs" />

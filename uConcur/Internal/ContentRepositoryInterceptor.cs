@@ -1,5 +1,4 @@
 ﻿using System;
-using AshMind.Extensions;
 using Castle.DynamicProxy;
 using Umbraco.Core.Models;
 using Umbraco.Core.Persistence.Repositories;
@@ -44,10 +43,9 @@ namespace uConcur.Internal {
 
         private void EnsureNoConflict(IContentRepository repository, IContent content) {
             var contentUpdateDate = content.GetUpdateDateOverride() ?? content.UpdateDate;
-            var latestUpdatedDate = _unitOfWork.Database
-                .ExecuteScalar<DateTime>("SELECT TOP 1 updateDate FROM cmsDocument WHERE nodeId = @Id AND newest = 1", new { content.Id })
-                .TruncateToSeconds();
-            
+            var latestUpdatedDate = _unitOfWork.Database.ExecuteScalar<DateTime>("SELECT TOP 1 updateDate FROM cmsDocument WHERE nodeId = @Id AND newest = 1", new { content.Id });
+            latestUpdatedDate = TruncateToSeconds(latestUpdatedDate);
+
             if (contentUpdateDate != latestUpdatedDate) {
                 var latest = repository.Get(content.Id);
                 throw Conflict(content, contentUpdateDate, latest, latestUpdatedDate);
@@ -59,6 +57,10 @@ namespace uConcur.Internal {
                 $"{attempted.ContentType.Alias} {attempted.Name} ({attempted.Id}) was changed since loaded.\r\nOriginal date was {attemptedDate}, latest date is {latestDate} (by user {latest.WriterId}).",
                 attempted, attemptedDate, latest, latestDate
             );
+        }
+
+        private static DateTime TruncateToSeconds(DateTime date) {
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, 0);
         }
     }
 }
