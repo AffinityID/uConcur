@@ -24,7 +24,7 @@ namespace uConcur.Tests.Web.Helpers {
         }
 
         public UmbracoDriverWrapper ForProperty(string name, Action<IWebElement> action) {
-            action(_webDriver.FindElement(By.CssSelector($".umb-editor[id='{name}']")));
+            action(WaitForElement(By.CssSelector($".umb-editor[id='{name}']")));
             return this;
         }
 

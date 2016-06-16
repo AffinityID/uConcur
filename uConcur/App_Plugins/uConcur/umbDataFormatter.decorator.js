@@ -1,4 +1,5 @@
 ﻿angular.module('umbraco.services').config(['$provide', function ($provide) {
+    'use strict';
     $provide.decorator('umbDataFormatter', function ($delegate) {
         var baseFormatContentPostData = $delegate.formatContentPostData;
         $delegate.formatContentPostData = function(displayModel) {
