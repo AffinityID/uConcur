@@ -42,9 +42,8 @@ namespace uConcur.Internal {
         }
 
         private void EnsureNoConflict(IContentRepository repository, IContent content) {
-            var contentUpdateDate = content.GetUpdateDateOverride() ?? content.UpdateDate;
-            var latestUpdatedDate = _unitOfWork.Database.ExecuteScalar<DateTime>("SELECT TOP 1 updateDate FROM cmsDocument WHERE nodeId = @Id AND newest = 1", new { content.Id });
-            latestUpdatedDate = TruncateToSeconds(latestUpdatedDate);
+            var contentUpdateDate = TruncateToSeconds(content.GetUpdateDateForConcurrencyCheck());
+            var latestUpdatedDate = TruncateToSeconds(_unitOfWork.Database.ExecuteScalar<DateTime>("SELECT TOP 1 updateDate FROM cmsDocument WHERE nodeId = @Id AND newest = 1", new { content.Id }));
 
             if (contentUpdateDate != latestUpdatedDate) {
                 var latest = repository.Get(content.Id);
@@ -54,7 +53,7 @@ namespace uConcur.Internal {
 
         private Exception Conflict(IContent attempted, DateTime attemptedDate, IContent latest, DateTime latestDate) {
             return new ContentConflictException(
-                $"{attempted.ContentType.Alias} {attempted.Name} ({attempted.Id}) was changed since loaded.\r\nOriginal date was {attemptedDate}, latest date is {latestDate} (by user {latest.WriterId}).",
+                $"{attempted.ContentType.Alias} {attempted.Name} ({attempted.Id}) was changed since loaded.\r\nOriginal date was {attemptedDate:yyyy-MM-ddTHH:mm:ss.fffK}, latest date is {latestDate:yyyy-MM-ddTHH:mm:ss.fffK} (by user {latest.WriterId}).",
                 attempted, attemptedDate, latest, latestDate
             );
         }

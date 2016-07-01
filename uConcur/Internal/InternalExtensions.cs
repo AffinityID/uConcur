@@ -20,6 +20,11 @@ namespace uConcur.Internal {
             return (DateTime?)GetValueOrDefault(content.AdditionalData, UpdateDateOverrideKey);
         }
 
+        public static DateTime GetUpdateDateForConcurrencyCheck([NotNull] this IContent content) {
+            Argument.NotNull(nameof(content), content);
+            return content.GetUpdateDateOverride() ?? content.UpdateDate;
+        }
+
         [CanBeNull]
         public static void SetUpdateDateOverride([NotNull] this IContent content, [CanBeNull] DateTime? value) {
             Argument.NotNull(nameof(content), content);

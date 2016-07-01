@@ -19,6 +19,6 @@ namespace uConcur.Properties {
     public static class AssemblyInfo {
         // please follow SemVer here:
         public const string VersionString = "0.1.0";
-        public const string InformationalVersionString = VersionString + "-int-test-05";
+        public const string InformationalVersionString = VersionString + "-int-test-06";
     }
 }
